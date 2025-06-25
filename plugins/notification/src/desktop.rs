@@ -39,6 +39,9 @@ impl<R: Runtime> crate::NotificationBuilder<R> {
         if let Some(icon) = self.data.icon {
             notification = notification.icon(icon);
         }
+        if let Some(sound) = self.data.sound {
+            notification = notification.sound(sound);
+        }
         #[cfg(feature = "windows7-compat")]
         {
             notification.notify(&self.app)?;
@@ -104,6 +107,8 @@ mod imp {
         icon: Option<String>,
         /// The notification identifier
         identifier: String,
+        /// The notification sound
+        sound: Option<String>,
     }
 
     impl Notification {
@@ -133,6 +138,13 @@ mod imp {
         #[must_use]
         pub fn icon(mut self, icon: impl Into<String>) -> Self {
             self.icon = Some(icon.into());
+            self
+        }
+
+        /// Sets the notification sound. By default the notification has no sound.
+        #[must_use]
+        pub fn sound(mut self, sound: impl Into<String>) -> Self {
+            self.sound = Some(sound.into());
             self
         }
 
@@ -187,6 +199,10 @@ mod imp {
                     || curr_dir.ends_with(format!("{SEP}target{SEP}release").as_str()))
                 {
                     notification.app_id(&self.identifier);
+                }
+
+                if let Some(sound) = self.sound {
+                    notification.sound_name(sound.as_str());
                 }
             }
             #[cfg(target_os = "macos")]
