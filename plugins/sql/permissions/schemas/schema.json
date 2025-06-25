@@ -333,12 +333,14 @@
         {
           "description": "Enables the reload command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-reload"
+          "const": "allow-reload",
+          "markdownDescription": "Enables the reload command without any pre-configured scope."
         },
         {
           "description": "Denies the reload command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-reload"
+          "const": "deny-reload",
+          "markdownDescription": "Denies the reload command without any pre-configured scope."
         },
         {
           "description": "Enables the select command without any pre-configured scope.",
