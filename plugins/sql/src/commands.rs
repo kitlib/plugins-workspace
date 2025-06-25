@@ -22,7 +22,8 @@ pub(crate) async fn load<R: Runtime>(
     let pool = DbPool::connect(&db, &app, path).await?;
 
     if let Some(migrations) = migrations.0.lock().await.remove(&db) {
-        let migrator = Migrator::new(migrations).await?;
+        let mut migrator = Migrator::new(migrations).await?;
+        migrator.set_ignore_missing(true);
         pool.migrate(&migrator).await?;
     }
 
@@ -53,7 +54,8 @@ pub(crate) async fn reload<R: Runtime>(
     let pool = DbPool::connect(&db, &app, path).await?;
 
     if let Some(migrations) = migrations.0.lock().await.remove(&db) {
-        let migrator = Migrator::new(migrations).await?;
+        let mut migrator = Migrator::new(migrations).await?;
+        migrator.set_ignore_missing(true);
         pool.migrate(&migrator).await?;
     }
 

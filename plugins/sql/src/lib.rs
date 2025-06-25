@@ -158,7 +158,8 @@ impl Builder {
                         if let Some(migrations) =
                             self.migrations.as_mut().and_then(|mm| mm.remove(&db))
                         {
-                            let migrator = Migrator::new(migrations).await?;
+                            let mut migrator = Migrator::new(migrations).await?;
+                            migrator.set_ignore_missing(true);
                             pool.migrate(&migrator).await?;
                         }
 
